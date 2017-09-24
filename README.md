@@ -19,21 +19,42 @@ Exmple ten type of server apis
 
 
 
+import types ;
+
 createJSAPI({
 
   domainPath :  "https:// xxx.serverx.com" ,
   indexPath  :  "/api/v1x" ,
   
-  responseDataType : 'object|json|string'
+  responseDataType : 'object|json|string' ,
   
   apis : {
-    
-    '/mobiles' : 'Mobiles/id' ,
-    '/mobiles/id' : 'Mobiles/id'
   
-  },
-  
+     '<serverPath>' :  {
+          jsPath : 'Mobiles' ,
+          schema : {
+          
+            'id' : { type : types.Long ,  property : 'mobileId' },
+            'name' : { type : types.String ,  property : 'displayName' },
+            'dimensions' : { type : types.JsonObject , shape : { }  ,  property : 'dimensions' },
+            'celluar' : { type : 'boolean' ,  property : 'celluar' }
+
+          }
+       },
+       '/mobiles/id' : 'Mobiles/id'
+       
+       
+     }
+   
+
 })
+
+
+old 
+
+ '/mobiles' : 'Mobiles/id' ,
+  '/mobiles/id' : 'Mobiles/id'
+  
 
 
 
