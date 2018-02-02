@@ -37,9 +37,9 @@ let jsonAPIS = {
 
 Methods       | json          | javascript api  | urls 
 ------------- | ------------- | --------------  | ----------------
-GET           |  { "Articles" : "kbArticles" }  | mySpace.Articles(parameters)    | https://myspace.com/space/v1/kbArticles?globalparams   
-GET  | { "Articles/!id/Get" : "kbArticles/id" }   | mySpace.Articles.Get({ id : '<>' })    | https://myspace.com/space/v1/kbArticles/<id>?globalparams 
-GET  | { "Articles/!id/Attachments" : "kbArticles/id/attachments" }  | mySpace.Articles.Attachments({ id : '<>' }) | https://myspace.com/space/v1/kbArticles/<id>/attachments?globalparams 
+GET           |  { "Articles" : "kbArticles" }  | mySpace.Articles(parameters)    | `https://myspace.com/space/v1/kbArticles?globalparams`   
+GET  | { "Articles/!id/Get" : "kbArticles/id" }   | mySpace.Articles.Get({ id : '<id>' })    | `https://myspace.com/space/v1/kbArticles/<id>?globalparams` 
+GET  | { "Articles/!id/Attachments" : "kbArticles/id/attachments" }  | mySpace.Articles.Attachments({ id : '<id>' }) | `https://myspace.com/space/v1/kbArticles/<id>/attachments?globalparams` 
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
