@@ -4,18 +4,23 @@
 
 ```
 let jsonAPIS = {
+
 	"Articles" : "kbArticles" ,
+	
 	"Articles/!id/Get" : "kbArticles/id",
 	"Articles/Search" : "kbArticles/search" ,
+	
 	"Articles/RelatedArticles" : "kbArticles/relatedArticleSearch" ,
 	"Articles/!id/++Like" : "kbArticles/id/like" ,
 	"Articles/!id/++DisLike" : "kbArticles/id/dislike" ,
 	"Articles/!id/Attachments" : "kbArticles/id/attachments" ,
 	"Articles/!id/++UpdateFeedback" : "kbArticles/id/feedbacks" ,
 	"Category" : "kbCategory",
-	"Articles/++Create" : "kbArticles",
 	"Articles/++uploadAttachment" : "uploadAttachments",
 	
+	"Articles/++Create" : "kbArticles",
+	"Articles/+++Update" : "kbArticles/id", 
+	"Articles/--Delete" : "kbArticles/id"	
 }
 
 ```
