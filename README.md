@@ -37,9 +37,9 @@ let jsonAPIS = {
 
 Methods       | json          | javascript api  | urls 
 ------------- | ------------- | --------------  | ----------------
-GET           |  "Articles" : "kbArticles"  | mySpace.Articles    | https://myspace.com/space/v1/kbArticles?globalparams   
-Content Cell  | Content Cell  | Content Cell    | Content Cell  
-Content Cell  | Content Cell  | Content Cell    | Content Cell  
+GET           |  { "Articles" : "kbArticles" }  | mySpace.Articles(parameters)    | https://myspace.com/space/v1/kbArticles?globalparams   
+GET  | { "Articles/!id/Get" : "kbArticles/id" }   | mySpace.Articles.Get({ id : '<>' })    | https://myspace.com/space/v1/kbArticles/<id>?globalparams 
+GET  | { "Articles/!id/Attachments" : "kbArticles/id/attachments" }  | mySpace.Articles.Attachments({ id : '<>' }) | https://myspace.com/space/v1/kbArticles/<id>/attachments?globalparams 
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
