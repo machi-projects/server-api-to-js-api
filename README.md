@@ -41,7 +41,7 @@ DELETE  | {"Articles/!id/--Delete" : "kbArticles/id"} | mySpace.Articles.Delete(
 
 #How to use
 
-`
+```
 let apiBuilder = new APIBuilder( "https://myspace.com/space/v1/" , defaultGlobalParamsForAll );
 let mySpace = apiBuilder.create( jsonAPIS );
 
@@ -50,5 +50,5 @@ mySpace.Articles.Get( parameters , resolve , reject  )
 mySpace.Articles.Search( parameters, resolve , reject )
 mySpace.Category(parameters, resolve , reject  )
   
-`
+```
 
