@@ -28,7 +28,7 @@ let jsonAPIS = {
 #key - meaning in above json /  #value - meaning in above json 
 
 ```  
-   { ' will be converted as js api ' : ' used for url to call api  }
+   { 'key will be converted as js api ' : ' value used for url to call api  }
 ```
 
 #Definations 
