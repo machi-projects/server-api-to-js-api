@@ -37,6 +37,10 @@ let jsonAPIS = {
 
 Methods       | json          | javascript api  | urls 
 ------------- | ------------- | --------------  | ----------------
+GET           |  "Articles" : "kbArticles"  | mySpace.Articles    | https://myspace.com/space/v1/kbArticles?globalparams   
+Content Cell  | Content Cell  | Content Cell    | Content Cell  
+Content Cell  | Content Cell  | Content Cell    | Content Cell  
+Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 Content Cell  | Content Cell  | Content Cell    | Content Cell  
 
