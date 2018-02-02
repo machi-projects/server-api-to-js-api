@@ -3,7 +3,6 @@ server api to js api cache mechanism
 
 ## It supports es6 supported javascript and Pure javascript support also there... :-)
 
-
 Exmple ten type of server apis 
 
    1. GET mobiles                  https:// xxx.serverx.com / api / v1x / mobiles 
@@ -15,75 +14,47 @@ Exmple ten type of server apis
    7. POST add mobile              https:// xxx.serverx.com / api / v1x / mobiles  - ( new payload data )
    8. PUT update mobile            https:// xxx.serverx.com / api / v1x / mobiles / <mobile id>  - ( update payload data )
    9. PATCH update mobile          https:// xxx.serverx.com / api / v1x / mobiles / <mobile id> /like
-   10. DELETE mobile               https:// xxx.serverx.com / api / v1x / mobiles / <mobile id>
+  10. DELETE mobile               https:// xxx.serverx.com / api / v1x / mobiles / <mobile id>
+
+#Example
+
+`
+let jsonAPIS = {
+	"Articles" : "kbArticles" ,
+	"Articles/!id/Get" : "kbArticles/id",
+	"Articles/Search" : "kbArticles/search" ,
+	"Articles/RelatedArticles" : "kbArticles/relatedArticleSearch" ,
+	"Articles/!id/++Like" : "kbArticles/id/like" ,
+	"Articles/!id/++DisLike" : "kbArticles/id/dislike" ,
+	"Articles/!id/Attachments" : "kbArticles/id/attachments" ,
+	"Articles/!id/++UpdateFeedback" : "kbArticles/id/feedbacks" ,
+	"Category" : "kbCategory" 
+}
+
+`
+
+#Definations 
+
+Methods       | json          | javascript api  | urls 
+------------- | ------------- | --------------  | ----------------
+Content Cell  | Content Cell  | Content Cell    | Content Cell  
+Content Cell  | Content Cell  | Content Cell    | Content Cell  
+
+For GET URLS SIMPLY 
+  "Articles" : "kbArticles"   -->   mySpace.Articles / https://myspace.com/space/v1/kbArticles?globalparams 
 
 
 
-import types ;
+#How to use
 
-createJSAPI({
+`
+let apiBuilder = new APIBuilder( "https://myspace.com/space/v1/" , defaultGlobalParamsForAll );
+let mySpace = apiBuilder.create( jsonAPIS );
 
-  domainPath :  "https:// xxx.serverx.com" ,
-  indexPath  :  "/api/v1x" ,
+mySpace.Articles( parameters , resolve , reject ) 
+mySpace.Articles.Get( parameters , resolve , reject  ) 
+mySpace.Articles.Search( parameters, resolve , reject )
+mySpace.Category(parameters, resolve , reject  )
   
-  responseDataType : 'object|json|string' ,
-  
-  apis : {
-  
-     '<serverPath>' :  {
-          jsPath : 'Mobiles' ,
-          schema : {
-          
-            'id' : { type : types.Long ,  property : 'mobileId' },
-            'name' : { type : types.String ,  property : 'displayName' },
-            'dimensions' : { type : types.JsonObject , shape : { }  ,  property : 'dimensions' },
-            'celluar' : { type : 'boolean' ,  property : 'celluar' }
-
-          }
-       },
-       '/mobiles/id' : 'Mobiles/id'
-       
-       
-     }
-   
-
-})
-
-
-old 
-
- '/mobiles' : 'Mobiles/id' ,
-  '/mobiles/id' : 'Mobiles/id'
-  
-
-
-
-
-
-Amaz.API.Mobiles(function(mobiles){
-  
-       mobiles.list(filter)
-       mobiles.id()
-  
-
-
-  },function(){
-
-
-});
-
-
-
-#Exmaple 
-
-```
-
-var htmlString = "<div class='flet' style='display:none'> <span style='margin-left:10px'> testing </span> </div>"
-purifyHtmlStyles = new PurifyHtmlStyles( htmlString );
-htmlString = purifyHtmlStyles.run();
-
-console.log( htmlString );
-
-```
-
+`
 
