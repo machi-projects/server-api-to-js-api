@@ -1,8 +1,4 @@
 # server-api-to-js-api
-server api to js api cache mechanism
-
-## It supports es6 supported javascript and Pure javascript support also there... :-)
-
 
 #Example
 
@@ -22,6 +18,12 @@ let jsonAPIS = {
 	
 }
 
+```
+
+#key - meaning in above json /  #value - meaning in above json 
+
+```  
+   { ' will be converted as js api ' : ' used for url to call api  }
 ```
 
 #Definations 
