@@ -1,7 +1,7 @@
 {
     "name": "server-api-to-js-api-creator",
     "umdVar": "Library",
-    "version": "1.0.0",
+    "version": "1.0.112",
     "description": "This is used for server api to js api on runtime",
     "main": "lib/index",
     "module": "es/index.js",

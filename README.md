@@ -58,4 +58,8 @@ PUT  | {"Blogs/!id/+++Update" : "connectBlogs/id"} | mySpace.Blogs.Update({ all 
 DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id : `<id>` })    | `https://myspace.com/space/v1/connectBlogs/<id>?globalparams`
 
 
+#!id - keys in url
 
+```
+	!id -> we will replace the value using parameters key(id) <==> mySpace.Blogs({id:'<292929929>'})
+```
