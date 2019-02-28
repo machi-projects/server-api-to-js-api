@@ -1,5 +1,31 @@
 # server-api-to-js-api
 
+
+# New Format In JSON API input
+
+{
+	"Blogs" : {
+		url : "connectBlogs",
+		method : "get",
+		params : {
+			"sortBy" : "[(+-)?createdTime|liked|disliked]",
+			"type" : "([])",
+			"category" : "number"
+		}
+	}
+}
+
+
+``` 
+	==> We can generate this json format from security.xml
+	
+	1. Test Cases for API is Easy.
+	2. Automation will be convered.
+	3. Parameter type validation on development time is helpful.
+	4. Create Documention for Javascript API.
+
+```
+
 #How to use in your code.
 
 ```
