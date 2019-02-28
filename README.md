@@ -68,6 +68,7 @@ DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id
 
 # What is New in Format - need todo.
 
+```
 {
 	"Blogs" : {
 		url : "connectBlogs",
@@ -79,6 +80,7 @@ DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id
 		}
 	}
 }
+```
 
 
 ``` 
