@@ -92,3 +92,30 @@ DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id
 	4. Create Documention for Javascript API.
 
 ```
+
+
+#Error response handling - need to work
+
+```
+	reject - object
+	{
+		status : 200|500|400|0, --> indicates status of called api
+		statusText : this.statusText,
+		clientError : true,  --> indicates error occured in api call.
+		data : responseContent, --> error response content
+	}
+   
+```
+
+
+#Success response handling - need to work
+
+```
+	success - object.
+	{} - based on server response.
+	
+	1.normalize the data ?
+	What is the use of normalize?
+	Duplication removal / client cache size.
+   
+```
