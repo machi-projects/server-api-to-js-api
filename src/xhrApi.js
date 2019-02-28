@@ -1,4 +1,3 @@
-/*$Id$*/
 function IsJsonString(str) {
     try {
         JSON.parse(str);
@@ -34,15 +33,15 @@ let isPlainObject = (payload)=>{
 
 
 export default (url)=>{
-  var core = {
+  let core = {
     ajax : function(method, url, payload , progressReport){
       return new Promise( function (resolve, reject) {
     	  
-        var client = new XMLHttpRequest();
+        let client = new XMLHttpRequest();
         
         
-        var queryData = null;
-        var isPayloadFormData = isFormData(payload);
+        let queryData = null;
+        let isPayloadFormData = isFormData(payload);
         if( isPayloadFormData ){
 
           	queryData = payload;
@@ -52,11 +51,10 @@ export default (url)=>{
         		queryData = JSON.stringify(payload);
         }
         else{
-
-	        	var data = "";
+	        	let data = "";
 	        	if ( isPlainObject( payload ) ) {
-	        		var argcount = 0;
-	        		for (var key in payload) {
+	        		let argcount = 0;
+	        		for (let key in payload) {
 	        			if (payload.hasOwnProperty(key)) {
 	        				if (argcount++) {
 	        					data += '&';
@@ -95,18 +93,18 @@ export default (url)=>{
         client.onload = function () {
         	
           if(this.status === 200 || this.status === 201 || this.status === 204 ) {
-            var response = this.response ? this.response : this.responseText;
+            let response = this.response ? this.response : this.responseText;
             if(!response){
               resolve(null);
             }
             else {
-              var isJsonString= IsJsonString(response)      
+              let isJsonString= IsJsonString(response)      
               resolve(isJsonString?JSON.parse(response): response);
             }
           } else {
-			   var responseContent = this.response ? this.response : this.responseText;
+			   let responseContent = this.response ? this.response : this.responseText;
 			   if( responseContent ){
-				   	var isJsonString = IsJsonString(responseContent);
+				   	let isJsonString = IsJsonString(responseContent);
 				   	responseContent = isJsonString?JSON.parse(responseContent): responseContent;
 			   }
 			
@@ -128,7 +126,7 @@ export default (url)=>{
         		client.upload.addEventListener("progress", function(evt) {
              	
                  if (evt.lengthComputable) {
-                    var percentComplete = evt.loaded / evt.total;
+                    let percentComplete = evt.loaded / evt.total;
                     percentComplete = parseInt(percentComplete * 100);
                     progressReport( percentComplete );
 
@@ -138,9 +136,9 @@ export default (url)=>{
 
         client.onerror = function (e) {
           
-           var responseContent = this.response ? this.response : this.responseText;
+           let responseContent = this.response ? this.response : this.responseText;
 		   if( responseContent ){
-			   var isJsonString = IsJsonString(responseContent);
+			   let isJsonString = IsJsonString(responseContent);
 			   responseContent = isJsonString?JSON.parse(responseContent): responseContent;
 		   }
 		   

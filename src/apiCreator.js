@@ -1,5 +1,4 @@
-//$Id$
-import requestAPI from './RequestAPI';
+import requestAPI from './xhrApi';
 
 let isFormData = (payload)=>{
 	
@@ -14,18 +13,18 @@ let isFormData = (payload)=>{
 
 let Builder = (apiJson, options) => {
 	//Url and param builder..
-	var apiOptions = (_method, requestUrl, parameters) => {
+	let apiOptions = (_method, requestUrl, parameters) => {
 		
-		var userParams = parameters;
-		var isFormDataParams = isFormData(parameters);
+		let userParams = parameters;
+		let isFormDataParams = isFormData(parameters);
 		if( !isFormDataParams ){
 			userParams = Object.assign({}, parameters); // to address re-back call ajax parameters keeping..
 			if (Object.keys(parameters).length) {
-				var propsToUrl = requestUrl.split('/'); // helps to some parameter to url...
-				for (var i = 0, len = propsToUrl.length; i < len; i++) {
-					var prop = propsToUrl[i];
+				let propsToUrl = requestUrl.split('/'); // helps to some parameter to url...
+				for (let i = 0, len = propsToUrl.length; i < len; i++) {
+					let prop = propsToUrl[i];
 					if (userParams.hasOwnProperty(prop) ) {
-						var value = userParams[prop];
+						let value = userParams[prop];
 						requestUrl = requestUrl.replace('/' + prop, value ? '/' + value : '');
 						delete userParams[prop];
 					}
@@ -37,7 +36,7 @@ let Builder = (apiJson, options) => {
 		let defaultParams = options.defaultParams;
 		let gobalParamsToUrl = '';
 		let count = 0;
-		for (var prop in defaultParams) {
+		for (let prop in defaultParams) {
 			if (count > 0) {
 				gobalParamsToUrl += `&${prop}=${defaultParams[prop]}`;
 				break;
@@ -49,7 +48,7 @@ let Builder = (apiJson, options) => {
 		gobalParamsToUrl = gobalParamsToUrl ? '?' + gobalParamsToUrl : '';
 		
 		if( !isFormDataParams ){
-			var length = userParams ? Object.keys(userParams).length : 0;
+			let length = userParams ? Object.keys(userParams).length : 0;
 			userParams =  length > 0 ? userParams : null;
 		}
 		 
@@ -60,20 +59,20 @@ let Builder = (apiJson, options) => {
 	};
 
 	//url - bind arguments not from user..
-	var httpConnection = ajaxmethod => {
+	let httpConnection = ajaxmethod => {
 		return (url, userParam, success, failure, progressReport) => {
 			userParam = userParam || {};
 			
-			var ajaxcall = () => {
+			let ajaxcall = () => {
 				
 				if (typeof userParam == 'function') {
 					
-					var apioptions = apiOptions(ajaxmethod, url, {});
+					let apioptions = apiOptions(ajaxmethod, url, {});
 					return requestAPI(apioptions.url)[ajaxmethod](apioptions.param, progressReport).then(userParam, success);
 					
 				}
 
-				var apioptions = apiOptions(ajaxmethod, url, userParam);
+				let apioptions = apiOptions(ajaxmethod, url, userParam);
 				return requestAPI(apioptions.url)[ajaxmethod](apioptions.param, progressReport).then(success, failure);
 			};
 
@@ -81,25 +80,25 @@ let Builder = (apiJson, options) => {
 		};
 	};
 
-	var objectKey = a => {
-		for (var i in a) {
+	let objectKey = a => {
+		for (let i in a) {
 			
 			return { name: i, value: a[i] };
 		}
 	};
   
 	//auto api functions creation...
-	var userAPIS = {};
-	//var isApiArray = Array.isArray(apiJson);
-	for (var prop in apiJson) {
+	let userAPIS = {};
+	//let isApiArray = Array.isArray(apiJson);
+	for (let prop in apiJson) {
 		
-		var api = prop;
-		var apiurl = apiJson[prop];
-		var apiFragments = api.split('/');
-		var lastObj = userAPIS;
+		let api = prop;
+		let apiurl = apiJson[prop];
+		let apiFragments = api.split('/');
+		let lastObj = userAPIS;
 
-		for (var j = 0; j < apiFragments.length; j++) {
-			var apiFragment = apiFragments[j];
+		for (let j = 0; j < apiFragments.length; j++) {
+			let apiFragment = apiFragments[j];
 			if (apiFragment.indexOf('!') != -1) {
 				continue; //Skipping this !api
 			}
