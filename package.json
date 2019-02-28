@@ -1,8 +1,8 @@
 {
-    "name": "server-api-to-js-api",
+    "name": "server-api-to-js-api-creator",
     "umdVar": "Library",
     "version": "1.0.0",
-    "description": "server api to js api creator runtime",
+    "description": "This is used for server api to js api on runtime",
     "main": "lib/index",
     "module": "es/index.js",
     "jsnext:main": "es/index.js",
@@ -23,10 +23,5 @@
         "build:es": "fz-react-cli build:library:es",
         "prepublish": "npm run build && npm run build:es && npm run build:umd",
         "generate": "rc-autocomplete"
-    },
-    "devDependencies": {
-    	"fz-react-cli": "0.0.3-beta.138"
-  	},
-    "tags": ["server-api", "js-api"],
-    "keywords": ["server-api", "js-api","es5","automate"]
+    }
 }

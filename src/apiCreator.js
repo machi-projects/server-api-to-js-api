@@ -10,33 +10,33 @@ let isFormData = (payload)=>{
 	return typeof payload == "function";
 }
 
-
 let Builder = (apiJson, options) => {
 	//Url and param builder..
-	let apiOptions = (_method, requestUrl, parameters) => {
+	var apiOptions = (_method, requestUrl, parameters, queryParameters) => {
 		
-		let userParams = parameters;
-		let isFormDataParams = isFormData(parameters);
+		var userParams = parameters;
+		var isFormDataParams = isFormData(parameters);
 		if( !isFormDataParams ){
 			userParams = Object.assign({}, parameters); // to address re-back call ajax parameters keeping..
 			if (Object.keys(parameters).length) {
-				let propsToUrl = requestUrl.split('/'); // helps to some parameter to url...
-				for (let i = 0, len = propsToUrl.length; i < len; i++) {
-					let prop = propsToUrl[i];
-					if (userParams.hasOwnProperty(prop) ) {
-						let value = userParams[prop];
+				var propsToUrl = requestUrl.split('/'); // helps to some parameter to url...
+				for (var i = 0, len = propsToUrl.length; i < len; i++) {
+					var prop = propsToUrl[i];
+					var paramKey = prop.replace(':','');
+					if ( prop.charAt(0) === ':' && userParams.hasOwnProperty(paramKey) ) {
+						var value = userParams[paramKey];
 						requestUrl = requestUrl.replace('/' + prop, value ? '/' + value : '');
-						delete userParams[prop];
+						requestUrl = requestUrl.replace( prop + '/', value ? value + '/' : '');
+						delete userParams[paramKey];
 					}
 				}
 			}
 		}
 		
-		
-		let defaultParams = options.defaultParams;
+		let defaultParams = Object.assign( {}, queryParameters, options.defaultParams);
 		let gobalParamsToUrl = '';
 		let count = 0;
-		for (let prop in defaultParams) {
+		for (var prop in defaultParams) {
 			if (count > 0) {
 				gobalParamsToUrl += `&${prop}=${defaultParams[prop]}`;
 				break;
@@ -48,72 +48,83 @@ let Builder = (apiJson, options) => {
 		gobalParamsToUrl = gobalParamsToUrl ? '?' + gobalParamsToUrl : '';
 		
 		if( !isFormDataParams ){
-			let length = userParams ? Object.keys(userParams).length : 0;
+			var length = userParams ? Object.keys(userParams).length : 0;
 			userParams =  length > 0 ? userParams : null;
 		}
 		 
 		return {
-				url: options.prefixUrl + requestUrl + gobalParamsToUrl, 
-				param:userParams
-			  };
+			url: options.prefixUrl + requestUrl + gobalParamsToUrl, 
+			param:userParams
+		};
 	};
 
+	
 	//url - bind arguments not from user..
-	let httpConnection = ajaxmethod => {
-		return (url, userParam, success, failure, progressReport) => {
-			userParam = userParam || {};
+	var httpConnection = ajaxmethod => {
+		return (url, userPayload, userQueryStringParams, success, failure, progressReport) => {
 			
-			let ajaxcall = () => {
+			var ajaxcall = () => {
 				
-				if (typeof userParam == 'function') {
+				let authHeaders = options.authHeaders;
+				let headers = authHeaders ? authHeaders() : null;
+				
+				if (typeof userPayload == 'function') {
 					
-					let apioptions = apiOptions(ajaxmethod, url, {});
-					return requestAPI(apioptions.url)[ajaxmethod](apioptions.param, progressReport).then(userParam, success);
-					
+					var apioptions = apiOptions(ajaxmethod, url, {});
+					return requestAPI(apioptions.url,headers)[ajaxmethod](apioptions.param, success).then(userPayload, userQueryStringParams);
 				}
 
-				let apioptions = apiOptions(ajaxmethod, url, userParam);
-				return requestAPI(apioptions.url)[ajaxmethod](apioptions.param, progressReport).then(success, failure);
+				if(typeof userQueryStringParams == 'function'){
+					var apioptions = apiOptions(ajaxmethod, url, (userPayload || {}));
+					return requestAPI(apioptions.url,headers)[ajaxmethod](apioptions.param, failure).then(userQueryStringParams, success);
+				}
+				
+				var apioptions = apiOptions(ajaxmethod, url, (userPayload || {}), userQueryStringParams);
+				return requestAPI(apioptions.url,headers)[ajaxmethod](apioptions.param, progressReport).then(success, failure);
 			};
-
+			
 			return ajaxcall();
 		};
 	};
 
-	let objectKey = a => {
-		for (let i in a) {
-			
-			return { name: i, value: a[i] };
-		}
-	};
-  
 	//auto api functions creation...
-	let userAPIS = {};
-	//let isApiArray = Array.isArray(apiJson);
-	for (let prop in apiJson) {
+	var userAPIS = {};
+	for (var prop in apiJson) {
 		
-		let api = prop;
-		let apiurl = apiJson[prop];
-		let apiFragments = api.split('/');
-		let lastObj = userAPIS;
+		var api = prop;
+		var apiurl = apiJson[prop];
+	
+		var apiFragments = api.split('/');
+		var lastObj = userAPIS;
 
-		for (let j = 0; j < apiFragments.length; j++) {
-			let apiFragment = apiFragments[j];
-			if (apiFragment.indexOf('!') != -1) {
+		for (var j = 0; j < apiFragments.length; j++) {
+			var apiFragment = apiFragments[j];
+			if (apiFragment.indexOf(':') != -1) {
 				continue; //Skipping this !api
 			}
 
 			if (apiFragment && typeof lastObj[apiFragment] === 'undefined') {
-				if (apiFragment.indexOf('++') != -1) {
-					apiFragment = apiFragment.replace('++', '');
-					lastObj[apiFragment] = httpConnection('post').bind(null, apiurl);
-				} else if (apiFragment.indexOf('+++') != -1) {
+				if (apiFragment.indexOf('+++') != -1) {
 					apiFragment = apiFragment.replace('+++', '');
 					lastObj[apiFragment] = httpConnection('put').bind(null, apiurl);
-				} else if (apiFragment.indexOf('--') != -1) {
+				} 
+				else if (apiFragment.indexOf('++') != -1) {
+					apiFragment = apiFragment.replace('++', '');
+					lastObj[apiFragment] = httpConnection('post').bind(null, apiurl);
+				} 
+				else if (apiFragment.indexOf('>>>') != -1) {
+					apiFragment = apiFragment.replace('>>>', '');
+					lastObj[apiFragment] = httpConnection('postAsParams').bind(null, apiurl);
+				}
+				else if (apiFragment.indexOf('--') != -1) {
 					apiFragment = apiFragment.replace('--', '');
 					lastObj[apiFragment] = httpConnection('delete').bind(null, apiurl);
-				} else {
+				} 
+				else if (apiFragment.indexOf('>>') != -1) {
+					apiFragment = apiFragment.replace('>>', '');
+					lastObj[apiFragment] = httpConnection('downloadFile').bind(null, apiurl);
+				}
+				else {
 					lastObj[apiFragment] = httpConnection('get').bind(null, apiurl);
 				}
 			}
@@ -121,7 +132,6 @@ let Builder = (apiJson, options) => {
 			if( apiFragment && typeof lastObj[apiFragment] !== 'undefined'){
 				lastObj = lastObj[apiFragment];
 			}
-			
 		}
 	}
 
@@ -129,15 +139,19 @@ let Builder = (apiJson, options) => {
 };
 
 export default class {
-	constructor(prefixUrl, defaultParams) {
+	
+	constructor(prefixUrl, defaultParams, authHeaders) {
 		this.prefixUrl = prefixUrl;
 		this.defaultParams = defaultParams;
+		this.authHeaders = authHeaders;
 	}
-
+	
 	create(javaApiList, name) {
 		
-		let apiBuilded = null;
-		apiBuilded = Builder(javaApiList || {}, { defaultParams: this.defaultParams, prefixUrl: this.prefixUrl });
-		return apiBuilded;
+		let defaultParams = this.defaultParams(name);
+		let prefixUrl = this.prefixUrl(name);
+		let authHeaders = this.authHeaders(name);
+		
+		return Builder(javaApiList || {}, { defaultParams, prefixUrl, authHeaders });
 	}
 }
