@@ -1,7 +1,7 @@
 {
     "name": "server-api-to-js-api",
     "umdVar": "Library",
-    "version": "1.0.26",
+    "version": "1.0.0",
     "description": "server api to js api creator runtime",
     "main": "lib/index",
     "module": "es/index.js",
@@ -13,7 +13,7 @@
     "author": "inian Karthick",
     "license": "MIT",
     "bugs": {
-            "url": "https://github.com/machi-projects/server-api-to-js-api/issues"
+        "url": "https://github.com/machi-projects/server-api-to-js-api/issues"
     },
     "homepage": "https://github.com/machi-projects/server-api-to-js-api#readme",
     "scripts": {
@@ -24,6 +24,9 @@
         "prepublish": "npm run build && npm run build:es && npm run build:umd",
         "generate": "rc-autocomplete"
     },
+    "devDependencies": {
+    	"fz-react-cli": "0.0.3-beta.138"
+  	},
     "tags": ["server-api", "js-api"],
     "keywords": ["server-api", "js-api","es5","automate"]
 }

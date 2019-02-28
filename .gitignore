@@ -1,0 +1,9 @@
+/**/node_modules
+/.pmd
+/.project
+/**/.DS_Store
+/**/.orig
+/**/dist
+/**/es
+/**/lib
+/**/build
