@@ -119,3 +119,44 @@ DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id
 	Duplication removal / client cache size.
    
 ```
+
+
+
+```
+
+#User Input Json for api builder
+
+constants = { get,  list, create, delete, update, download, upload  };
+
+	model ==> 1+2 advanced1 + constants ==> reverse
+	{
+		"<Action>" : "[....urls..]",
+		[constants.get] : [
+			"communityTopics",
+			"communityTopics/:id",
+			"communityTopics/:id/comments",
+			"communityTopics/:tpopoc/comments/:commentId",
+			"mostDiscussedCommunityTopics",
+			
+			"kbArticles",
+			"kbArticles/:id",
+			"kbArticles/:id/attachments"
+		],
+		[constants.update] : [
+			"communityTopics/:id"
+		],
+		[constants.delete] : [
+			"communityTopics/:id"
+		],
+		[constants.create] : [
+			"communityTopics"
+		],
+	};
+	
+	let obj = Build(json);
+	global.portal = obj;
+	portal.communityTopics();
+	portal.kbArticles();
+	
+	
+````	
