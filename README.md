@@ -121,10 +121,9 @@ DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id
 ```
 
 
+#User Input Json for api builder
 
 ```
-
-#User Input Json for api builder
 
 constants = { get,  list, create, delete, update, download, upload  };
 
