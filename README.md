@@ -1,161 +1,118 @@
-# server-api-to-js-api
+#js-api-creator
 
-#How to use in your code.
+##How to install
 
 ```
-let apiBuilder = new APIBuilder( (m)=>"https://myspace.com/space/v1/" , (m)=>globalParameters, (m)=>headers );
-let apiObject = apiBuilder.create( jsonAPIS, 'mySpace' );
+npm i js-api-creator
+```
 
-apiObject.mySpace.Blogs( parameters , resolve , reject ) 
-apiObject.mySpace.Blogs.Get( parameters , resolve , reject  ) 
-apiObject.mySpace.Blogs.Search( parameters, resolve , reject )
-apiObject.mySpace.Category(parameters, resolve , reject  )
+
+##How to use in your code - example
+
+```
+import { constants } from 'js-api-creator'; 
+let jsonAPIS = {
+	"blogs" : { url : "connectBlogs" , method : constants.get } ,
+	"blogs.create" : { url : "connectBlogs" , method : constants.post } ,
+	"blogs.deleteIt" : { url : "connectBlogs/:id" , method : constants.deleteIt } ,
+	"blogs.update" : { url : "connectBlogs/:id" , method : constants.put }  ,
+	"blogs.get" : { url : "connectBlogs/:id" , method : constants.get },
+	"blogs.getByPermalink" : { url : "connectBlogs/blogByPermalink", method : constants.get } ,
+	"blogs.search" : { url : "connectBlogs/search", method : constants.get },
+	"blogs.relatedBlogs" : { url : "connectBlogs/relatedArticleSearch" , method : constants.get } ,
+	"blogs.like" : { url : "connectBlogs/:id/like", method : constants.post },
+	"blogs.disLike" : { url : "connectBlogs/:id/dislike", method : constants.post } ,
+	"blogs.attachments" : { url : "connectBlogs/:id/attachments", method : constants.get } ,
+	"blogs.attachments.download" : { url : "connectBlogs/:blogId/attachments/:id/content" ,
+									 method : constants.download }  ,
+	"blogs.updateFeedback" : { url : "connectBlogs/:id/feedbacks", method : constants.post } ,
+	"blogs.comments" : { url : "connectBlogs/:id/comments" , method : constants.get},
+	"blogs.comments.get" :{ url : "connectBlogs/:id/comments/:id", method : constants.get },
+	"blogs.comments.attachments" :{ url : "connectBlogs/:blogId/comments/:id/attachments", method : constants.get },
+	"blogs.comments.attachments.download" : { url : "connectBlogsBlogs/:blogId/comments/:commentId/attachments/:id/content" , 
+										method : constants.download } ,
+	"categories" : { url : "connectCategory" , method : constants.get }
+}
+
+```
+
+##How we are differenciating the multiple id's in url <== from parameters
+
+```
+     Input : 
+     
+    "blogs.comments.attachments.download" : { 
+		url : "connectBlogsBlogs/:blogId/comments/:commentId/attachments/:id/content" ,
+		method : constants.download
+     }
+     
+     How we call : 
+     blogs.comments.attachments.download({
+          blogId : 'efgh-abcd',                    ===> refers blog id
+     	commentId : 'abcd-efgh',                 ===> refers comment id
+     	id : 'xyz-pqrs'                          ===> refers attachment id
+     })
+
+    
+    What is the URL output : 
+    
+    	`connectBlogsBlogs/efgh-abcd/comments/abcd-efgh/attachments/xyz-pqrs/content`
+
+```
+
+
+##Exmaple build the apis
+
+```
+import APIBuilder from 'js-api-creator'; 
+let apiBuilder = new APIBuilder( 
+	   (m)=>"https://myspace.com/space/v1/" ,   ===> prefix will be added for all urls + dynamic changable
+	   (m)=>globalParameters,                   ===> params will be added for all urls + dynamic changable
+	   (m)=>headers                             ===> header will be added for all urls + dynamic changable
+	);
+let apiModuleObject = apiBuilder.create( jsonAPIS, 'modueName' );
+
+apiModuleObject.modueName.blogs( parameters , resolve , reject ) 
+apiModuleObject.modueName.blogs.Get( parameters , resolve , reject  ) 
+apiModuleObject.modueName.blogs.Search( parameters, resolve , reject )
+apiModuleObject.modueName.categories( parameters, resolve , reject  )
   
 ```
 
-#Example
+
+##method - Specific url prefix.
 
 ```
-let jsonAPIS = {
-	"Blogs" : "connectBlogs" ,
-	"Blogs/++Create" : "connectBlogs" ,
-	"Blogs/:id/--DeleteIt" : "connectBlogs/:id" ,
-	"Blogs/:id/+++Update" : "connectBlogs/:id" ,
-	"Blogs/:id/Get" : "connectBlogs/:id",
-	"Blogs/GetByPermalink" : "connectBlogs/blogByPermalink",
-	"Blogs/Search" : "connectBlogs/search" ,
-	"Blogs/RelatedBlogs" : "connectBlogs/relatedArticleSearch" ,
-	"Blogs/:id/++Like" : "connectBlogs/:id/like" ,
-	"Blogs/:id/++DisLike" : "connectBlogs/:id/dislike" ,
-	"Blogs/:id/Attachments" : "connectBlogs/:id/attachments" ,
-	"Blogs/:blogId/Attachments/:id/>>Download" : "connectBlogs/:blogId/attachments/:id/content" ,
-	"Blogs/:id/++UpdateFeedback" : "connectBlogs/:id/feedbacks" ,
-	"Blogs/:id/Comments" : "connectBlogs/:id/comments",
-	"Blogs/:id/Comments/:id/Get" : "connectBlogs/:id/comments/:id",
-	"Blogs/:blogId/Comments/:commentId/Attachments/:id/>>Download" : "connectBlogsBlogs/:blogId/comments/:commentId/attachments/:id/content" ,
-	"Category" : "connectCategory"
-}
-
-```
-
-#key / #value - meaning in above json 
-
-```  
-   { '<key will be converted as js api>' : '<value used for url to call api>'  }
-```
-
-#Definations 
-
-Methods       | json          | javascript api  | urls 
-------------- | ------------- | --------------  | ----------------
-GET           |  { "Blogs" : "connectBlogs" }  | mySpace.Blogs(parameters)    | `https://myspace.com/space/v1/connectBlogs?globalparams`   
-GET  | { "Blogs/!id/Get" : "connectBlogs/id" }   | mySpace.Blogs.Get({ id : `<id>` })    | `https://myspace.com/space/v1/connectBlogs/<id>?globalparams` 
-GET  | { "Blogs/!id/Attachments" : "connectBlogs/id/attachments" }  | mySpace.Blogs.Attachments({ id : `<id>` }) | `https://myspace.com/space/v1/connectBlogs/<id>/attachments?globalparams` 
-POST  | { "Blogs/!id/++Like" : "connectBlogs/id/like" }  | mySpace.Blogs.Like({ id : `<id>`})    | `https://myspace.com/space/v1/connectBlogs/<id>/like?globalparams`
-POST  | {"Blogs/++Create" : "connectBlogs"} | mySpace.Blogs.Create({ all the data })    | `https://myspace.com/space/v1/connectBlogs?globalparams`
-POST  | {"Blogs/++CreateAttachment" : "uploadAttachments"} | mySpace.Blogs.CreateAttachment(FormData) | `https://myspace.com/space/v1/uploadAttachments?globalparams`  
-PUT  | {"Blogs/!id/+++Update" : "connectBlogs/id"} | mySpace.Blogs.Update({ all the data })    | `https://myspace.com/space/v1/connectBlogs/<id>?globalparams`
-DELETE  | {"Blogs/!id/--Delete" : "connectBlogs/id"} | mySpace.Blogs.Delete({ id : `<id>` })    | `https://myspace.com/space/v1/connectBlogs/<id>?globalparams`
-
-
-#!id - keys in url
-
-```
-	!id -> we will replace the value using parameters key(id) <==> mySpace.Blogs({id:'<292929929>'})
+modueName.blogs( { url } , parameters , resolve , reject )
 ```
 
 
 
-# What is New in Format - need todo.
+##module - Specific url pattern prefix , global parameters and header.
 
 ```
-{
-	"Blogs" : {
-		url : "connectBlogs",
-		method : "get",
-		params : {
-			"sortBy" : "[(+-)?createdTime|liked|disliked]",
-			"type" : "([])",
-			"category" : "number"
-		}
-	}
-}
+	 new APIBuilder( 
+	 	(m)=>{
+	 	   if(m == "kb"){
+	 	   	 return module-specific-prefix
+	 	   }
+	 	   
+	 	   return prefix
+	 	},
+	 	
+	 	(m)=>{
+	 	   if(m == "kb"){
+	 	   	 return {module-specific-global-parameters}
+	 	   }
+	 	   
+	 	   return {global-parameters}
+	 	},
+	 	
+	 	if(m == "kb"){
+	 	   	 return {module-specific-headers}
+	 	   }
+	 	   
+	 	   return {global-headers}
+	 	}
+	 );
 ```
-
-
-``` 
-	==> We can generate this json format from security.xml
-	
-	1. Test Cases for API is Easy.
-	2. Automation will be convered.
-	3. Parameter type validation on development time is helpful.
-	4. Create Documention for Javascript API.
-
-```
-
-
-#Error response handling - need to work
-
-```
-	reject - object
-	{
-		status : 200|500|400|0, --> indicates status of called api
-		statusText : this.statusText,
-		clientError : true,  --> indicates error occured in api call.
-		data : responseContent, --> error response content
-	}
-   
-```
-
-
-#Success response handling - need to work
-
-```
-	success - object.
-	{} - based on server response.
-	
-	1.normalize the data ?
-	What is the use of normalize?
-	Duplication removal / client cache size.
-   
-```
-
-
-#User Input Json for api builder
-
-```
-
-constants = { get,  list, create, delete, update, download, upload  };
-
-	model ==> 1+2 advanced1 + constants ==> reverse
-	{
-		"<Action>" : "[....urls..]",
-		[constants.get] : [
-			"communityTopics",
-			"communityTopics/:id",
-			"communityTopics/:id/comments",
-			"communityTopics/:tpopoc/comments/:commentId",
-			"mostDiscussedCommunityTopics",
-			
-			"kbArticles",
-			"kbArticles/:id",
-			"kbArticles/:id/attachments"
-		],
-		[constants.update] : [
-			"communityTopics/:id"
-		],
-		[constants.delete] : [
-			"communityTopics/:id"
-		],
-		[constants.create] : [
-			"communityTopics"
-		],
-	};
-	
-	let obj = Build(json);
-	global.portal = obj;
-	portal.communityTopics();
-	portal.kbArticles();
-	
-	
-````	
