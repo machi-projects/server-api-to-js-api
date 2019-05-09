@@ -92,9 +92,13 @@ let Builder = (apiJson, options) => {
 	for (var prop in apiJson) {
 		
 		var api = prop;
-		var apiurl = apiJson[prop];
+		var apivalue = apiJson[prop];
+		
+		var apiurl = apivalue.url;
+		var apimethod = apivalue.method;
 	
-		var apiFragments = api.split('/');
+		//var apiFragments = api.split('/');
+		var apiFragments = api.split('.');
 		var lastObj = userAPIS;
 
 		for (var j = 0; j < apiFragments.length; j++) {
@@ -104,7 +108,10 @@ let Builder = (apiJson, options) => {
 			}
 
 			if (apiFragment && typeof lastObj[apiFragment] === 'undefined') {
-				if (apiFragment.indexOf('+++') != -1) {
+				
+				lastObj[apiFragment] = httpConnection(apimethod).bind(null, apiurl);
+				
+				/*if (apiFragment.indexOf('+++') != -1) {
 					apiFragment = apiFragment.replace('+++', '');
 					lastObj[apiFragment] = httpConnection('put').bind(null, apiurl);
 				} 
@@ -126,7 +133,8 @@ let Builder = (apiJson, options) => {
 				}
 				else {
 					lastObj[apiFragment] = httpConnection('get').bind(null, apiurl);
-				}
+				}*/
+				
 			}
 			
 			if( apiFragment && typeof lastObj[apiFragment] !== 'undefined'){
