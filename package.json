@@ -1,8 +1,9 @@
 {
-    "name": "server-api-to-js-api-creator",
+    "name": "js-api-creator",
     "umdVar": "Library",
-    "version": "1.0.112",
-    "description": "This is used for server api to js api on runtime",
+    "version": "1.0.11",
+    "description": "This is used for server side api call as js api call in client side - js-api-creator javascript es6",
+    "keywords" : "js-api-creator js api creator javascript es6",
     "main": "lib/index",
     "module": "es/index.js",
     "jsnext:main": "es/index.js",
@@ -18,10 +19,13 @@
     "homepage": "https://github.com/machi-projects/server-api-to-js-api#readme",
     "scripts": {
         "clean": "fz-react-cli clean lib coverage",
-        "build:umd": "fz-react-cli build:component:umd",
         "build": "npm run clean && fz-react-cli build:component",
         "build:es": "fz-react-cli build:library:es",
+        "build:umd": "fz-react-cli build:component:umd",
         "prepublish": "npm run build && npm run build:es && npm run build:umd",
         "generate": "rc-autocomplete"
+    },
+    "dependencies": {
+    	"fz-react-cli": "0.0.3-beta.143"
     }
 }
